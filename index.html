@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <script>
+        // Defining constants to make the code more readable
+        const DRAW = 0;
+        const COMPUTER_WIN = 1;
+        const USER_WIN = 2;
+        const ROCK = "rock";
+        const PAPER = "paper";
+        const SCISSORS = "scissors";
+
+        // Gets a random rock paper or scissors value
+        function getComputerChoice() {
+            let choice = Math.floor(Math.random() * 3);
+            switch (choice) {
+                case 0:
+                    return ROCK;
+                    break;
+                case 1:
+                    return PAPER;
+                    break;
+                case 2:
+                    return SCISSORS
+                    break;
+                default:
+                    return undefined;
+            }
+        }
+
+        // Gets the users choice
+        function getUserChoice() {
+            const choice = prompt("Please enter rock, paper, or scissors");
+            return choice.toLowerCase();
+        }
+
+        // Checks the outcome of a round of rock paper scissors
+        function playRound(userChoice, computerChoice) {
+            // Checking all of the possible outcomes for the game
+            if (userChoice === computerChoice) {
+                // Draw
+                return DRAW;
+            } else if (userChoice === ROCK) {
+                // Because computerChoice cannot be rock here we only need to check paper or scissors and can infer the other outcome
+                if (computerChoice === PAPER) {
+                    return COMPUTER_WIN;
+                } else {
+                    return USER_WIN;
+                }
+            } else if (userChoice === PAPER) {
+                // Only need to check for rock or scissors here
+                if (computerChoice === ROCK) {
+                    return USER_WIN;
+                } else {
+                    return COMPUTER_WIN;
+                }
+            } else {
+                // User choice is scissors here
+                // Only need to check for rock or paper here
+                if (computerChoice === ROCK) {
+                    return COMPUTER_WIN;
+                } else {
+                    return USER_WIN;
+                }
+            }
+        }
+
+        function game() {
+            // Variables to track score and number of rounds played
+            let gameCount = 0;
+            let userScore = 0;
+            let computerScore = 0;
+
+            // Loop until 5 rounds have been won/lost
+            while (gameCount < 5) {
+                // Get user and computer choice and evalutate the calculate the result
+                let userChoice = getUserChoice();
+                let computerChoice = getComputerChoice();
+                let result = playRound(userChoice, computerChoice);
+
+                if (result === DRAW) {
+                    // If there is a draw, this round is voided and so we decrement the counter
+                    gameCount--;
+                    console.log(`DRAW, You chose ${userChoice} and the computer chose ${computerChoice}.`);
+                } else if (result === USER_WIN) {
+                    // User won the round, increment their score
+                    console.log(`WIN, You chose ${userChoice} and the computer chose ${computerChoice}.`);
+                    userScore++;
+                } else {
+                    // Computer won the round, increment its score
+                    console.log(`LOSE, You chose ${userChoice} and the computer chose ${computerChoice}.`);
+                    computerScore++;
+                }
+
+                // Checks to see if this is the last round
+                if (gameCount >= 4) {
+                    if (userScore > computerScore) {
+                        // User wins
+                        console.log("User won with a score of: " + userScore);
+                    } else {
+                        // Computer wins
+                        console.log("Computer won with a score of: " + computerScore);
+                    }
+                }
+
+                // Increment the round counter
+                gameCount++;
+            }
+        }
+
+        // Start the game
+        game();
+    </script>
+</body>
+</html>
